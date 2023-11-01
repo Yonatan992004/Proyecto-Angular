@@ -1,0 +1,40 @@
+
+<div class="container">
+
+<h1>Lista de Tareas</h1>
+<!-- Un campo de entrada para agregar nuevas tareas. 
+  El valor se almacena en la variable newTask
+y el ngModel: permite la sincronizacion de datos entre interfaz de usuario y componente, se utiliza en formularios-->
+<input [(ngModel)]="newTask" placeholder="Nueva tarea" class="cajaTarea">
+<!--Un botón que llama a la función addTask(newTask) para agregar una nueva tarea a la lista.-->
+<button (click)="addTask(newTask)" class="btn-agregar">Agregar Tarea</button>
+
+<!---->
+<div class="lista-tareas">
+<ul>
+  <!--Utiliza la directiva *nfor para recorrer la matriz y crear elemento lista-->
+  <li *ngFor="let task of tasks; let i = index" class="tarea">
+    <span *ngIf="editingTaskIndex !== i" ><!--aqui usamos la condicional para que se muestre solo cuando se este editando-->
+      {{ task }}<!--es llamada interpolacion y es para mostrar dinamicamente datos-->
+      <div class="caja-btn">
+        <button (click)="deleteTask(i)" class="btn-eliminar">Eliminar</button><!--este boton permite eliminar la tarea llamando al metodo -->
+        <button (click)="startEditingTask(i)" class="btn-editar">Editar</button>
+        <!--este inicia el proceso de edicion llamando el metodo del componente pasando el indice i de la tarea que se va a editar-->
+        <button (click)="toggleTaskStatus(i)"  class="btn-pendiente" [ngClass]="{'completada-btn': isTaskCompleted(i), 'pendiente-btn': !isTaskCompleted(i)}"> {{ isTaskCompleted(i) ? 'Completada' : 'Pendiente' }}</button>
+        <!--este boton permite mostrar si la tarea esta completada o pendiente-->      
+    </div>
+    </span>
+    <!--muestra el contenido solo si la variable editingTaskIndex es igual al índice actual i, lo que significa que se muestra 
+      el formulario de edición cuando se está editando una tarea.-->
+    <span *ngIf="editingTaskIndex === i">
+      <input [(ngModel)]="editedTask" placeholder="Editar tarea" class="caja-editar"><!--Este campo permite editar la tarea llamando el 
+        metodo, cuando se edita los cambios se reflejan en esta variable-->
+        <div class="caja-btn"> 
+          <button (click)="updateTask(i)" class="btn-guardar">Guardar</button><!--este boton permite guardar los cambios realizados en la tarea editada-->
+          <button (click)="cancelEditingTask()" class="btn-cancelar">Cancelar</button><!--Este permite cancelar la edicion de una tarea y mostrar el texto original-->
+        </div>
+    </span>
+  </li>
+</ul>
+</div>
+</div>
